@@ -1,12 +1,13 @@
+console.log("✅ main.js is executing");
+
 import { fetchPokemonById, fetchSpeciesById } from "./poke-api.js";
 
 function randomInt(min, max) {
-  // inclusive
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-window.pokedexApp = function () {
-  return {
+document.addEventListener("alpine:init", () => {
+  Alpine.data("pokedexApp", () => ({
     loading: false,
     error: "",
     showDetails: true,
@@ -15,7 +16,6 @@ window.pokedexApp = function () {
     species: null,
 
     async init() {
-      // load one on first page view
       await this.loadRandom();
     },
 
@@ -28,10 +28,8 @@ window.pokedexApp = function () {
       this.error = "";
 
       try {
-        // Gen 1–9 range-ish; keep it safe:
         const id = randomInt(1, 1025);
 
-        // Two endpoints (requirement): pokemon + species
         const [pokemon, species] = await Promise.all([
           fetchPokemonById(id),
           fetchSpeciesById(id),
@@ -45,5 +43,5 @@ window.pokedexApp = function () {
         this.loading = false;
       }
     },
-  };
-};
+  }));
+});
