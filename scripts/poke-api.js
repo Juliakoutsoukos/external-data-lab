@@ -27,7 +27,6 @@ export async function fetchSpeciesById(id) {
   const englishGenus =
     (data.genera || []).find((g) => g.language.name === "en")?.genus ?? "Unknown";
 
-  // pick an English flavor text and clean whitespace/newlines
   const englishFlavor =
     (data.flavor_text_entries || []).find((f) => f.language.name === "en")?.flavor_text ??
     "No flavor text found.";

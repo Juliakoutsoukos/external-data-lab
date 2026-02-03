@@ -1,11 +1,10 @@
-console.log("✅ main.js is executing");
-
 import { fetchPokemonById, fetchSpeciesById } from "./poke-api.js";
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// Register component when Alpine is ready (most reliable)
 document.addEventListener("alpine:init", () => {
   Alpine.data("pokedexApp", () => ({
     loading: false,

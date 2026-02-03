@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>External Data Lab – PokéAPI</title>
 
-    <!-- Tailwind FIRST (styling) -->
+    <!-- Tailwind FIRST -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Alpine SECOND (reactivity) -->
+    <!-- Alpine SECOND -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-    <!-- Your modules LAST -->
-    <script defer type="module" src="./scripts/main.js"></script>
+    <!-- Your module LAST (use root path on Netlify) -->
+    <script defer type="module" src="/scripts/main.js"></script>
   </head>
 
   <body class="min-h-screen bg-slate-950 text-slate-100">
@@ -22,18 +22,22 @@
         <p class="text-slate-300">Two endpoints from PokéAPI + Alpine + Tailwind.</p>
 
         <nav class="mt-4 flex gap-4 text-sm">
-          <a class="text-slate-200 hover:text-white underline underline-offset-4" href="/">Home</a>
-          <a class="text-slate-200 hover:text-white underline underline-offset-4" href="/writeup.html">Write-up</a>
+          <a class="text-slate-200 hover:text-white underline underline-offset-4" href="./index.html">Home</a>
+          <a class="text-slate-200 hover:text-white underline underline-offset-4" href="./writeup.html">Write-up</a>
         </nav>
       </div>
     </header>
-    <main ... x-data="pokedexApp" x-init="init()">
+
+    <!-- IMPORTANT: x-data uses Alpine.data name WITHOUT parentheses -->
+    <main class="mx-auto max-w-4xl px-4 py-10" x-data="pokedexApp" x-init="init()">
       <section class="rounded-2xl border border-slate-800 bg-slate-900/30 p-6 shadow-sm">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 class="text-xl font-semibold">Random Pokémon</h2>
             <p class="text-slate-300 text-sm">
-              Uses two endpoints: <code class="text-slate-100">/pokemon/{id}</code> and
+              Uses two endpoints:
+              <code class="text-slate-100">/pokemon/{id}</code>
+              and
               <code class="text-slate-100">/pokemon-species/{id}</code>
             </p>
           </div>
@@ -65,6 +69,11 @@
           </div>
         </template>
 
+        <!-- Loading hint -->
+        <div class="mt-6 text-sm text-slate-300" x-show="loading">
+          Loading Pokémon…
+        </div>
+
         <!-- Content -->
         <div class="mt-6 grid gap-6 md:grid-cols-2" x-show="pokemon">
           <!-- Card: /pokemon/{id} -->
@@ -80,7 +89,9 @@
               </div>
 
               <div>
-                <p class="text-sm text-slate-300">Endpoint 1: <span class="text-slate-100">/pokemon/{id}</span></p>
+                <p class="text-sm text-slate-300">
+                  Endpoint 1: <span class="text-slate-100">/pokemon/{id}</span>
+                </p>
                 <h3 class="text-2xl font-bold capitalize" x-text="pokemon?.name"></h3>
                 <p class="text-slate-300 text-sm">
                   #<span x-text="pokemon?.id"></span> •
@@ -107,7 +118,9 @@
 
           <!-- Card: /pokemon-species/{id} -->
           <div class="rounded-2xl border border-slate-800 bg-slate-950/40 p-5" x-show="showDetails">
-            <p class="text-sm text-slate-300">Endpoint 2: <span class="text-slate-100">/pokemon-species/{id}</span></p>
+            <p class="text-sm text-slate-300">
+              Endpoint 2: <span class="text-slate-100">/pokemon-species/{id}</span>
+            </p>
 
             <div class="mt-3 space-y-3">
               <div class="rounded-xl border border-slate-800 bg-slate-900/30 p-4">
@@ -128,7 +141,7 @@
           </div>
 
           <div class="md:col-span-2 text-xs text-slate-400">
-            Tip: If sprites ever show as null, just click “New Random” again—some older entries don’t have every image.
+            Tip: If a sprite is null, click “New Random” again—some entries don’t have every image.
           </div>
         </div>
       </section>
