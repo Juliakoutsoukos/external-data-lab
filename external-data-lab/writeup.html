@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Write-up – External Data Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="min-h-screen bg-slate-950 text-slate-100">
+    <header class="border-b border-slate-800">
+      <div class="mx-auto max-w-4xl px-4 py-6">
+        <h1 class="text-2xl font-bold tracking-tight">Write-up</h1>
+        <nav class="mt-4 flex gap-4 text-sm">
+          <a class="text-slate-200 hover:text-white underline underline-offset-4" href="/">Home</a>
+          <a class="text-slate-200 hover:text-white underline underline-offset-4" href="/writeup.html">Write-up</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-4xl px-4 py-10">
+      <article class="rounded-2xl border border-slate-800 bg-slate-900/30 p-6 leading-relaxed">
+        <h2 class="text-xl font-semibold">AI Tool Reflection</h2>
+
+        <p class="mt-4 text-slate-200">
+          For this lab, I used Copilot with two different models and compared how well they handled
+          (1) load order for Tailwind + Alpine + module scripts and (2) fetch() code using two API endpoints.
+          One model was better at explaining *why* Alpine must load before my app code (so <code>window.pokedexApp</code>
+          exists when the page initializes), and it suggested splitting the API logic into a separate file to keep code
+          readable. The other model produced faster “copy/paste” code, but it initially mixed <code>defer</code> scripts
+          with modules incorrectly and didn’t handle missing sprite data until I prompted it with the error I saw.
+          The most helpful prompts were: “Show me a clean file structure with multiple JS files and correct script order”
+          and “Render two different endpoints on the same page with Tailwind cards.” Overall, AI sped up scaffolding,
+          but I still had to debug and adjust details like endpoint fields, null images, and module import paths.
+        </p>
+
+        <p class="mt-6 text-sm text-slate-400">
+          Replace the generic wording above with your real Copilot prompts/responses (required by the rubric).
+        </p>
+      </article>
+    </main>
+  </body>
+</html>

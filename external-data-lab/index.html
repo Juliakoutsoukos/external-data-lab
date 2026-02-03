@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>External Data Lab – PokéAPI</title>
+
+    <!-- Tailwind FIRST (styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Alpine SECOND (reactivity) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Your modules LAST -->
+    <script defer type="module" src="/scripts/main.js"></script>
+  </head>
+
+  <body class="min-h-screen bg-slate-950 text-slate-100">
+    <header class="border-b border-slate-800">
+      <div class="mx-auto max-w-4xl px-4 py-6">
+        <h1 class="text-2xl font-bold tracking-tight">External Data Lab</h1>
+        <p class="text-slate-300">Two endpoints from PokéAPI + Alpine + Tailwind.</p>
+
+        <nav class="mt-4 flex gap-4 text-sm">
+          <a class="text-slate-200 hover:text-white underline underline-offset-4" href="/">Home</a>
+          <a class="text-slate-200 hover:text-white underline underline-offset-4" href="/writeup.html">Write-up</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-4xl px-4 py-10" x-data="pokedexApp()" x-init="init()">
+      <section class="rounded-2xl border border-slate-800 bg-slate-900/30 p-6 shadow-sm">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 class="text-xl font-semibold">Random Pokémon</h2>
+            <p class="text-slate-300 text-sm">
+              Uses two endpoints: <code class="text-slate-100">/pokemon/{id}</code> and
+              <code class="text-slate-100">/pokemon-species/{id}</code>
+            </p>
+          </div>
+
+          <div class="flex gap-3">
+            <button
+              class="rounded-xl bg-indigo-500 px-4 py-2 font-medium text-white hover:bg-indigo-400 disabled:opacity-50"
+              @click="loadRandom()"
+              :disabled="loading"
+            >
+              <span x-show="!loading">New Random</span>
+              <span x-show="loading">Loading…</span>
+            </button>
+
+            <button
+              class="rounded-xl border border-slate-700 px-4 py-2 font-medium hover:bg-slate-800"
+              @click="toggleDetails()"
+            >
+              Toggle details
+            </button>
+          </div>
+        </div>
+
+        <!-- Error -->
+        <template x-if="error">
+          <div class="mt-6 rounded-xl border border-red-800 bg-red-950/40 p-4 text-red-200">
+            <p class="font-semibold">Something went wrong</p>
+            <p class="text-sm" x-text="error"></p>
+          </div>
+        </template>
+
+        <!-- Content -->
+        <div class="mt-6 grid gap-6 md:grid-cols-2" x-show="pokemon">
+          <!-- Card: /pokemon/{id} -->
+          <div class="rounded-2xl border border-slate-800 bg-slate-950/40 p-5">
+            <div class="flex items-center gap-4">
+              <div class="h-20 w-20 overflow-hidden rounded-2xl bg-slate-900 grid place-items-center">
+                <img
+                  class="h-20 w-20 object-contain"
+                  :src="pokemon?.sprite"
+                  :alt="pokemon?.name"
+                  loading="lazy"
+                />
+              </div>
+
+              <div>
+                <p class="text-sm text-slate-300">Endpoint 1: <span class="text-slate-100">/pokemon/{id}</span></p>
+                <h3 class="text-2xl font-bold capitalize" x-text="pokemon?.name"></h3>
+                <p class="text-slate-300 text-sm">
+                  #<span x-text="pokemon?.id"></span> •
+                  <span class="capitalize" x-text="pokemon?.types?.join(' / ')"></span>
+                </p>
+              </div>
+            </div>
+
+            <div class="mt-4 grid grid-cols-3 gap-3 text-sm">
+              <div class="rounded-xl border border-slate-800 bg-slate-900/30 p-3">
+                <p class="text-slate-400">Height</p>
+                <p class="font-semibold" x-text="pokemon?.height"></p>
+              </div>
+              <div class="rounded-xl border border-slate-800 bg-slate-900/30 p-3">
+                <p class="text-slate-400">Weight</p>
+                <p class="font-semibold" x-text="pokemon?.weight"></p>
+              </div>
+              <div class="rounded-xl border border-slate-800 bg-slate-900/30 p-3">
+                <p class="text-slate-400">Base exp</p>
+                <p class="font-semibold" x-text="pokemon?.baseExp"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card: /pokemon-species/{id} -->
+          <div class="rounded-2xl border border-slate-800 bg-slate-950/40 p-5" x-show="showDetails">
+            <p class="text-sm text-slate-300">Endpoint 2: <span class="text-slate-100">/pokemon-species/{id}</span></p>
+
+            <div class="mt-3 space-y-3">
+              <div class="rounded-xl border border-slate-800 bg-slate-900/30 p-4">
+                <p class="text-slate-400 text-sm">Genus</p>
+                <p class="font-semibold" x-text="species?.genus"></p>
+              </div>
+
+              <div class="rounded-xl border border-slate-800 bg-slate-900/30 p-4">
+                <p class="text-slate-400 text-sm">Flavor text</p>
+                <p class="text-sm leading-relaxed" x-text="species?.flavorText"></p>
+              </div>
+
+              <div class="rounded-xl border border-slate-800 bg-slate-900/30 p-4">
+                <p class="text-slate-400 text-sm">Habitat</p>
+                <p class="font-semibold capitalize" x-text="species?.habitat"></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="md:col-span-2 text-xs text-slate-400">
+            Tip: If sprites ever show as null, just click “New Random” again—some older entries don’t have every image.
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-slate-800">
+      <div class="mx-auto max-w-4xl px-4 py-6 text-sm text-slate-400">
+        Built with Alpine + Tailwind + PokéAPI.
+      </div>
+    </footer>
+  </body>
+</html>
